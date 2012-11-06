@@ -2,6 +2,7 @@
 require('rb.php');
 
 define('USER', 'user');
+define('EVENT', 'event');
 define('INVALID_LOGIN_CODE', '-1');
 
 define('EMAIL_ADDR_PARAM', 'addr');
@@ -13,6 +14,9 @@ define('USEF_ID_PARAM', 'u');
 define('USER_ID', 'id');
 define('USER_FNAME', 'firstname');
 define('USER_LNAME', 'lastname');
+
+define('EVENT_ID', 'id');
+define('EVENT_NAME', 'name');
 
 R::setup('mysql:host=localhost;dbname=rb', 'root', '');
 ?>
