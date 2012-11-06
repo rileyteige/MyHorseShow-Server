@@ -17,6 +17,8 @@ define('USER_LNAME', 'lastname');
 
 define('EVENT_ID', 'id');
 define('EVENT_NAME', 'name');
+define('EVENT_START_DATE', 'sdate');
+define('EVENT_END_DATE', 'edate');
 
 R::setup('mysql:host=localhost;dbname=rb', 'root', '');
 ?>
