@@ -10,13 +10,19 @@ function getLoginInfo($email, $password) {
 	if ($user == null || $password != $user->password)
 		return invalidLogin();
 		
-	$eventIds = R::related($user, EVENT);
+	$eventIds = $user->sharedEvent;
 	$events = array();
 	foreach($eventIds as $key => $value) {
-		echo $value;
 		$event = R::findOne(EVENT, ' id = ? ', array ( $value['id'] ));
-		$events[] = $event;
+		$addedEvent = array ('id' => $event->id,
+							'name' => $event->name,
+							'sdate' => $event->startdate,
+							'edate' => $event->enddate);
+		$events[] = $addedEvent;
+		$dates[$key] = $addedEvent['sdate']; // sdate index
 	}
+		
+	array_multisort($dates, SORT_ASC, $events);
 		
 	return array(USER_ID => $user->id,
 				USER_FNAME => $user->firstname,

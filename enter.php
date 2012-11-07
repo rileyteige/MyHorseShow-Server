@@ -10,6 +10,6 @@ if ($email == null || $password == null)
 else
 	echo json_encode(getLoginInfo($email, $password));
 
-	R::close();
+R::close();
 	
 ?>
