@@ -1,6 +1,6 @@
 <?php
 
-require('setup.php');
+require_once('setup.php');
 
 $name = $_GET[EVENT_NAME];
 $startdate = $_GET[EVENT_START_DATE];
@@ -13,6 +13,7 @@ $event = R::dispense(EVENT);
 $event->name = $name;
 $event->startdate = $startdate;
 $event->enddate = $enddate;
+$event->sharedUser = [];
 
 $id = R::store($event);
 

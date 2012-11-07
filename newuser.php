@@ -1,6 +1,6 @@
 <?php
 
-require('setup.php');
+require_once('setup.php');
 
 function verify_user($user) {
 	return $user->email != null &&
@@ -25,6 +25,7 @@ $user->firstname = $firstname;
 $user->lastname = $lastname;
 $user->password = $password;
 $user->usefid = $usef_id;
+$user->sharedEvent = [];
 
 if (!verify_user($user))
 	return;

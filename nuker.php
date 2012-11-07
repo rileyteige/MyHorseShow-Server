@@ -1,6 +1,6 @@
 <?php
 
-require('setup.php');
+require_once('setup.php');
 
 $codeword = $_GET['codeword'];
 

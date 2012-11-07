@@ -1,5 +1,5 @@
 <?php
-require('rb.php');
+require_once('rb.php');
 
 define('USER', 'user');
 define('EVENT', 'event');
@@ -14,6 +14,7 @@ define('USEF_ID_PARAM', 'u');
 define('USER_ID', 'id');
 define('USER_FNAME', 'firstname');
 define('USER_LNAME', 'lastname');
+define('USER_EVENTS', 'events');
 
 define('EVENT_ID', 'id');
 define('EVENT_NAME', 'name');
