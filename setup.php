@@ -25,6 +25,7 @@ define('USEF_ID_PARAM', 'u');
 define('USER_ID', 'uid');
 define('USER_FNAME', 'firstname');
 define('USER_LNAME', 'lastname');
+define('USER_EMAIL', 'email');
 define('USER_EVENTS', 'events');
 
 define('EVENT_ID', 'eid');

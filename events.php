@@ -71,9 +71,15 @@ class Event {
 	}
 }
 
-function createEvent($admin, $name, $startdate, $enddate) {
+function createEvent($adminId, $name, $startdate, $enddate) {
 	$event = R::dispense(EVENT);
-	$event->aid = $admin;
+	
+	$admin = R::load(USER, $adminId);
+	if (!$admin->id) {
+		throw new Exception('Bad admin id: '.$adminId);
+	}
+	
+	$event->admin = $admin;
 	$event->name = $name;
 	$event->startdate = $startdate;
 	$event->enddate = $enddate;
@@ -90,7 +96,15 @@ function getEvent($eventId) {
 }
 
 function getAllEvents() {
-	return R::getAll('select * from '.EVENT);
+	$events = array();
+	$redbeanevents = R::getAll('select * from '.EVENT);
+	if ($redbeanevents != null) {
+		foreach($redbeanevents as $rbEvent) {
+			$event = R::load(EVENT, $rbEvent['id']);
+			$events[] = R::exportAll($event);
+		}
+	}
+	return $events;
 }
 
 ?>

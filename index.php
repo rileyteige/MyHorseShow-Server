@@ -25,7 +25,7 @@ $app->post('/user', function () {
 		
 			/* CREATE A USER */
 			case 'user': {
-				$inUser = $typeCheck->user;
+				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
 					$userId = createUser($inUser->email, $inUser->password, $inUser->firstname, $inUser->lastname, $inUser->usefid);
 					if ($userId > 0) {
@@ -37,7 +37,7 @@ $app->post('/user', function () {
 			
 			/* LINK A USER TO AN EVENT */
 			case 'event': {
-				$inEvent = $typeCheck->event;
+				$inEvent = $typeCheck->obj;
 				if ($inEvent != null) {
 					$returnCode = giveUserEvent($inEvent->email, $inEvent->eventId);
 					if ($returnCode < 0) {
@@ -58,7 +58,7 @@ $app->post('/event', function () {
 		
 			/* CREATE AN EVENT */
 			case 'event': {
-				$inEvent = $typeCheck->event;
+				$inEvent = $typeCheck->obj;
 				if ($inEvent != null) {
 					$eventId = createEvent($inEvent->aid, $inEvent->name, $inEvent->startdate, $inEvent->enddate);
 					if ($eventId > 0) {
@@ -70,7 +70,7 @@ $app->post('/event', function () {
 			
 			/* ADD A BARN TO AN EVENT */
 			case 'barn': {
-				$inBarn = $typeCheck->barn;
+				$inBarn = $typeCheck->obj;
 				if ($inBarn != null) {
 					$barnId = createBarn($inBarn->eid, $inBarn->name);
 					if ($barnId > 0) {
@@ -82,7 +82,7 @@ $app->post('/event', function () {
 			
 			/* ADD A DIVISION TO AN EVENT */
 			case 'division': {
-				$inDivision = $typeCheck->division;
+				$inDivision = $typeCheck->obj;
 				if ($inDivision != null) {
 					$divisionId = createDivision($inDivision->eid, $inDivision->name);
 					if ($divisionId > 0) {
@@ -94,7 +94,7 @@ $app->post('/event', function () {
 			
 			/* ADD A CLASS TO AN EVENT */
 			case 'class': {
-				$inClass = $typeCheck->showclass;
+				$inClass = $typeCheck->obj;
 				if ($inClass != null) {
 					$classId = createClass($inClass->did, $inClass->name);
 					if ($classId > 0) {
@@ -113,8 +113,10 @@ $app->post('/event/barns/:barnId', function($barnId) {
 	if ($body != null) {
 		$typeCheck = json_decode($body);
 		switch ($typeCheck->type) {
+		
+			/* ADD A STALL TO A BARN */
 			case 'stall': {
-				$inStall = $typeCheck->stall;
+				$inStall = $typeCheck->obj;
 				if ($inStall != null) {
 					$stallId = createStall($barnId, $inStall->name);
 					if ($stallId > 0) {
@@ -133,8 +135,10 @@ $app->post('/event/classes/:classId', function($classId) {
 	if ($body != null) {
 		$typeCheck = json_decode($body);
 		switch ($typeCheck->type) {
+		
+			/* ADD A USER (RIDER) TO A CLASS */
 			case 'user': {
-				$inUser = $typeCheck->user;
+				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
 					$returnCode = addRider($classId, $inUser->uid);
 					if ($returnCode > 0) {
@@ -143,8 +147,42 @@ $app->post('/event/classes/:classId', function($classId) {
 					}
 				}
 			}
+			
+			/* SET A CLASS TIME */
+			case 'time': {
+				$inTime = $typeCheck->obj;
+				if ($inTime != null) {
+					$returnCode = setClassTime($classId, $inTime->time);
+					if ($returnCode > 0) {
+						$class = R::load(SHOWCLASS, $classId);
+						echo json_encode($class->export());
+					}
+				}
+			}
 		}
 	}
+});
+
+$app->post('/event/barns/stalls/:stallId', function($stallId) {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch ($typeCheck->type) {
+		
+			/* ASSIGN A USER TO A STALL */
+			case 'user': {
+				$inUser = $typeCheck->obj;
+				if ($inUser != null) {
+					$returnCode = setStallOccupant($stallId, $inUser->uid);
+					if ($returnCode > 0) {
+						$stall = R::load(STALL, $stallId);
+						echo json_encode($stall->export());
+					}
+				}
+			}
+		}
+	}
+
 });
 
 $app->run();

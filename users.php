@@ -48,16 +48,18 @@ function getLoginInfo($email, $password) {
 	$eventIds = $user->sharedEvent;
 	$events = array();
 	foreach($eventIds as $key => $value) {
-		$events[] = $value->export();
+		$events[] = R::exportAll($value);
 		$dates[$key] = $value['startdate'];
 	}
-		
-	array_multisort($dates, SORT_ASC, $events);
-		
+	
+	if (count($events) > 0)
+		array_multisort($dates, SORT_ASC, $events);
+
 	return array(USER_ID => $user->id,
 				USER_FNAME => $user->firstname,
 				USER_LNAME => $user->lastname,
-				USER_EVENTS => $events);
+				USER_EMAIL => $user->email,
+				USER_EVENTS => count($events) > 0 ? $events : null);
 }
 
 function getUser($email) {

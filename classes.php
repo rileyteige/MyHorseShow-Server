@@ -32,7 +32,19 @@ function addRider($classId, $riderId) {
 		throw new Exception('Invalid rider id: '.$riderId);
 	}
 	
-	$class->ownUser[] = $rider;
+	$class->sharedUser[] = $rider;
+	R::store($class);
+	
+	return $class->id;
+}
+
+function setClassTime($classId, $time) {
+	$class = R::load(SHOWCLASS, $classId);
+	if (!$class->id) {
+		throw new Exception('Invalid class id: '.$classId);
+	}
+	
+	$class->time = $time;
 	R::store($class);
 	
 	return $class->id;
