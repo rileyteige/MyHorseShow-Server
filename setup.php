@@ -7,6 +7,7 @@ include_once 'barns.php';
 include_once 'divisions.php';
 include_once 'classes.php';
 include_once 'helpers.php';
+include_once 'stalls.php';
 
 require 'Slim/Slim/Slim.php';
 \Slim\Slim::registerAutoloader();
@@ -36,6 +37,7 @@ define('ADMIN_ID', 'aid');
 define('BARN', 'barn');
 define('DIVISION', 'division');
 define('SHOWCLASS', 'class');
+define('STALL', 'stall');
 
-R::setup('mysql:host=localhost;dbname=rb', 'root', '');
+R::setup('mysql:host=localhost;dbname=myhorseshow', 'root', '');
 ?>

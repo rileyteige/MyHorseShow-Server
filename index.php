@@ -25,7 +25,7 @@ $app->post('/user', function () {
 		
 			/* CREATE A USER */
 			case 'user': {
-				$inUser = typeCheck->user;
+				$inUser = $typeCheck->user;
 				if ($inUser != null) {
 					$userId = createUser($inUser->email, $inUser->password, $inUser->firstname, $inUser->lastname, $inUser->usefid);
 					if ($userId > 0) {
@@ -37,7 +37,7 @@ $app->post('/user', function () {
 			
 			/* LINK A USER TO AN EVENT */
 			case 'event': {
-				$inEvent = typeCheck->event;
+				$inEvent = $typeCheck->event;
 				if ($inEvent != null) {
 					$returnCode = giveUserEvent($inEvent->email, $inEvent->eventId);
 					if ($returnCode < 0) {
@@ -103,6 +103,46 @@ $app->post('/event', function () {
 					}
 				}
 			} break;
+		}
+	}
+});
+
+/* BARNS */
+$app->post('/event/barns/:barnId', function($barnId) {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch ($typeCheck->type) {
+			case 'stall': {
+				$inStall = $typeCheck->stall;
+				if ($inStall != null) {
+					$stallId = createStall($barnId, $inStall->name);
+					if ($stallId > 0) {
+						$stall = R::load(STALL, $stallId);
+						echo json_encode($stall->export());
+					}
+				}
+			} break;
+		}
+	}
+});
+
+/* CLASSES */
+$app->post('/event/classes/:classId', function($classId) {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch ($typeCheck->type) {
+			case 'user': {
+				$inUser = $typeCheck->user;
+				if ($inUser != null) {
+					$returnCode = addRider($classId, $inUser->uid);
+					if ($returnCode > 0) {
+						$class = R::load(SHOWCLASS, $classId);
+						echo json_encode($class->export());
+					}
+				}
+			}
 		}
 	}
 });

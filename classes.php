@@ -20,4 +20,21 @@ function createClass($divId, $className) {
 	
 	return $id;
 }
+
+function addRider($classId, $riderId) {
+	$class = R::load(SHOWCLASS, $classId);
+	if (!$class->id) {
+		throw new Exception('Invalid class id: '.$classId);
+	}
+	
+	$rider = R::load(USER, $riderId);
+	if (!$rider->id) {
+		throw new Exception('Invalid rider id: '.$riderId);
+	}
+	
+	$class->ownUser[] = $rider;
+	R::store($class);
+	
+	return $class->id;
+}
 ?>
