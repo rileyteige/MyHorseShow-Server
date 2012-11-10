@@ -38,13 +38,13 @@ function addRider($classId, $riderId) {
 	return $class->id;
 }
 
-function setClassTime($classId, $time) {
+function setClassTime($classId, $starttime) {
 	$class = R::load(SHOWCLASS, $classId);
 	if (!$class->id) {
 		throw new Exception('Invalid class id: '.$classId);
 	}
 	
-	$class->time = $time;
+	$class->starttime = $starttime;
 	R::store($class);
 	
 	return $class->id;

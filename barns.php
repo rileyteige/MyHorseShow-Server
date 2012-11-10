@@ -24,4 +24,27 @@ function createBarn($eventId, $name) {
 	
 	return $id;
 }
+
+function getBarnStalls($stallIds) {
+	if ($stallIds == null) {
+		return null;
+	}
+	
+	$stalls = array();
+	foreach($stallIds as $key => $value) {
+		$stall = R::load(STALL, $value->id);
+		
+		if (!$stall->id) {
+			continue;
+		}
+		
+		$occupant = R::load(USER, $stall->occupant_id);
+		
+		$stalls[] = array(ID => $stall->id,
+						STALL_NAME => $stall->name,
+						STALL_OCCUPANT => $occupant->id ? loadBasicUserInfo($occupant) : null);
+	}
+	
+	return $stalls;
+}
 ?>

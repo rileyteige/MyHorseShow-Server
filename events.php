@@ -107,4 +107,43 @@ function getAllEvents() {
 	return $events;
 }
 
+function getEventBarns($barnIds) {
+	if ($barnIds == null)
+		return null;
+	
+	$barns = array();
+	foreach($barnIds as $key => $value) {
+		$barn = R::load(BARN, $value->id);
+		
+		if (!$barn->id) {
+			continue;
+		}
+		
+		$barns[] = array(ID => $barn->id,
+						BARN_NAME => $barn->name,
+						BARN_STALLS => getBarnStalls($barnIds));
+	}
+	return $barns;
+}
+
+function getEventDivisions($divisionIds) {
+	if ($divisionIds == null) {
+		return null;
+	}
+	
+	$divisions = array();
+	foreach($divisionIds as $key => $value) {
+		$division = R::load(DIVISION, $value->id);
+		
+		if (!$division->id) {
+			continue;
+		}
+		
+		$divisions[] = array(ID => $division->id,
+							DIVISION_NAME => $division->name,
+							DIVISION_CLASSES => getDivisionClasses($division->ownClass));
+	}
+	return $divisions;
+}
+
 ?>

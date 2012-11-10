@@ -44,7 +44,7 @@ $app->post('/user', function () {
 						throw new Exception('Could not give event to user.');
 					}
 				}
-			}
+			} break;
 		}
 	}
 });
@@ -140,25 +140,25 @@ $app->post('/event/classes/:classId', function($classId) {
 			case 'user': {
 				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
-					$returnCode = addRider($classId, $inUser->uid);
+					$returnCode = addRider($classId, $inUser->id);
 					if ($returnCode > 0) {
 						$class = R::load(SHOWCLASS, $classId);
 						echo json_encode($class->export());
 					}
 				}
-			}
+			} break;
 			
 			/* SET A CLASS TIME */
-			case 'time': {
+			case 'start': {
 				$inTime = $typeCheck->obj;
 				if ($inTime != null) {
-					$returnCode = setClassTime($classId, $inTime->time);
+					$returnCode = setClassTime($classId, $inTime->starttime);
 					if ($returnCode > 0) {
 						$class = R::load(SHOWCLASS, $classId);
 						echo json_encode($class->export());
 					}
 				}
-			}
+			} break;
 		}
 	}
 });

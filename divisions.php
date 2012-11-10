@@ -30,4 +30,25 @@ function createDivision($eventId, $name) {
 	return $id;
 }
 
+function getDivisionClasses($classIds) {
+	if ($classIds == null) {
+		return null;
+	}
+	
+	$classes = array();
+	foreach ($classIds as $key => $value) {
+		$class = R::load(SHOWCLASS, $value->id);
+		if (!$class->id) {
+			continue;
+		}
+		
+		$classes[] = array(ID => $class->id,
+						CLASS_NAME => $class->name,
+						CLASS_START_TIME => $class->starttime,
+						CLASS_PARTICIPANTS => getBasicUserInfo($class->sharedUser));
+	}
+	
+	return $classes;
+}
+
 ?>
