@@ -57,7 +57,7 @@ function getUserEvents($eventIds) {
 						EVENT_NAME => $event->name,
 						EVENT_START_DATE => $event->startdate,
 						EVENT_END_DATE => $event->enddate,
-						EVENT_ADMIN => $admin->id ? $admin->export() : null,
+						EVENT_ADMIN => $admin->id ? loadBasicUserInfo($admin) : null,
 						EVENT_BARNS => getEventBarns($event->ownBarn),
 						EVENT_DIVISIONS => getEventDivisions($event->ownDivision));
 	}
@@ -83,6 +83,7 @@ function getLoginInfo($email, $password) {
 				USER_FNAME => $user->firstname,
 				USER_LNAME => $user->lastname,
 				USER_EMAIL => $user->email,
+				USER_USEF_ID => $user->usefid,
 				USER_EVENTS => getUserEvents($eventIds)); //count($events) > 0 ? $events : null);
 }
 

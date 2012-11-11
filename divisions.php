@@ -45,7 +45,7 @@ function getDivisionClasses($classIds) {
 		$classes[] = array(ID => $class->id,
 						CLASS_NAME => $class->name,
 						CLASS_START_TIME => $class->starttime,
-						CLASS_PARTICIPANTS => getBasicUserInfo($class->sharedUser));
+						CLASS_PARTICIPANTS => getClassParticipants($class->ownParticipation));
 	}
 	
 	return $classes;

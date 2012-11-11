@@ -21,7 +21,12 @@ function createClass($divId, $className) {
 	return $id;
 }
 
-function addRider($classId, $riderId) {
+function addRider($eventId, $classId, $riderId, $horseName) {
+	$event = R::load(EVENT, $eventId);
+	if (!$event->id) {
+		throw new Exception('Invalid event id: '.$eventId);
+	}
+	
 	$class = R::load(SHOWCLASS, $classId);
 	if (!$class->id) {
 		throw new Exception('Invalid class id: '.$classId);
@@ -32,8 +37,16 @@ function addRider($classId, $riderId) {
 		throw new Exception('Invalid rider id: '.$riderId);
 	}
 	
-	$class->sharedUser[] = $rider;
+	$participation = R::dispense(PARTICIPATION);
+	$participation->rider = $rider;
+	$participation->horse = $horseName;
+	R::store($participation);
+	
+	$class->ownParticipation[] = $participation;
 	R::store($class);
+	
+	$event->sharedUser[] = $rider;
+	R::store($event);
 	
 	return $class->id;
 }
@@ -48,5 +61,27 @@ function setClassTime($classId, $starttime) {
 	R::store($class);
 	
 	return $class->id;
+}
+
+function getClassParticipants($participationIds) {
+	if ($participationIds == null) {
+		return;
+	}
+	
+	$participations = array();
+	foreach($participationIds as $key => $value) {
+		$participation = R::load(PARTICIPATION, $value['id']);
+		if (!$participation->id) {
+			continue;
+		}
+		
+		$rider = R::load(USER, $participation->rider_id);
+		
+		$participations[] = array(ID => $participation->id,
+								PARTICIPATION_RIDER => $rider->id ? loadBasicUserInfo($rider) : null,
+								PARTICIPATION_HORSE => $participation->horse,
+								PARTICIPATION_RANK => $participation->rank);
+	}
+	return $participations;
 }
 ?>

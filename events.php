@@ -87,6 +87,8 @@ function createEvent($adminId, $name, $startdate, $enddate) {
 	$event->ownBarn = [];
 	$event->ownContact = [];
 	$event->ownDivision = [];
+	
+	$event->sharedUser[] = $admin;
 
 	return R::store($event);
 }

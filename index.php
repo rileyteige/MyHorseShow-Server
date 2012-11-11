@@ -60,7 +60,7 @@ $app->post('/event', function () {
 			case 'event': {
 				$inEvent = $typeCheck->obj;
 				if ($inEvent != null) {
-					$eventId = createEvent($inEvent->aid, $inEvent->name, $inEvent->startdate, $inEvent->enddate);
+					$eventId = createEvent($inEvent->admin, $inEvent->name, $inEvent->startdate, $inEvent->enddate);
 					if ($eventId > 0) {
 						$event = R::load(EVENT, $eventId);
 						echo json_encode($event->export());
@@ -72,7 +72,7 @@ $app->post('/event', function () {
 			case 'barn': {
 				$inBarn = $typeCheck->obj;
 				if ($inBarn != null) {
-					$barnId = createBarn($inBarn->eid, $inBarn->name);
+					$barnId = createBarn($inBarn->id, $inBarn->name);
 					if ($barnId > 0) {
 						$barn = R::load(BARN, $barnId);
 						echo json_encode($barn->export());
@@ -84,7 +84,7 @@ $app->post('/event', function () {
 			case 'division': {
 				$inDivision = $typeCheck->obj;
 				if ($inDivision != null) {
-					$divisionId = createDivision($inDivision->eid, $inDivision->name);
+					$divisionId = createDivision($inDivision->id, $inDivision->name);
 					if ($divisionId > 0) {
 						$division = R::load(DIVISION, $divisionId);
 						echo json_encode($division->export());
@@ -96,7 +96,7 @@ $app->post('/event', function () {
 			case 'class': {
 				$inClass = $typeCheck->obj;
 				if ($inClass != null) {
-					$classId = createClass($inClass->did, $inClass->name);
+					$classId = createClass($inClass->id, $inClass->name);
 					if ($classId > 0) {
 						$class = R::load(SHOWCLASS, $classId);
 						echo json_encode($class->export());
@@ -130,7 +130,7 @@ $app->post('/event/barns/:barnId', function($barnId) {
 });
 
 /* CLASSES */
-$app->post('/event/classes/:classId', function($classId) {
+$app->post('/events/:eventId/classes/:classId', function($eventId, $classId) {
 	$body = http_get_request_body();
 	if ($body != null) {
 		$typeCheck = json_decode($body);
@@ -140,7 +140,7 @@ $app->post('/event/classes/:classId', function($classId) {
 			case 'user': {
 				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
-					$returnCode = addRider($classId, $inUser->id);
+					$returnCode = addRider($eventId, $classId, $inUser->id, $inUser->horse);
 					if ($returnCode > 0) {
 						$class = R::load(SHOWCLASS, $classId);
 						echo json_encode($class->export());

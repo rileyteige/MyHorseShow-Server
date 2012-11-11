@@ -52,11 +52,16 @@ define('DIVISION_CLASSES', 'ownClass');
 define('SHOWCLASS', 'class');
 define('CLASS_NAME', 'name');
 define('CLASS_START_TIME', 'starttime');
-define('CLASS_PARTICIPANTS', 'sharedUser');
+define('CLASS_PARTICIPANTS', 'ownParticipation');
 
 define('STALL', 'stall');
 define('STALL_NAME', 'name');
 define('STALL_OCCUPANT', 'occupant');
+
+define('PARTICIPATION', 'participation');
+define('PARTICIPATION_RIDER', 'rider');
+define('PARTICIPATION_HORSE', 'horse');
+define('PARTICIPATION_RANK', 'rank');
 
 R::setup('mysql:host=localhost;dbname=myhorseshow', 'root', '');
 ?>
