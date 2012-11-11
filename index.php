@@ -173,7 +173,7 @@ $app->post('/event/barns/stalls/:stallId', function($stallId) {
 			case 'user': {
 				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
-					$returnCode = setStallOccupant($stallId, $inUser->uid);
+					$returnCode = setStallOccupant($stallId, $inUser->id);
 					if ($returnCode > 0) {
 						$stall = R::load(STALL, $stallId);
 						echo json_encode($stall->export());

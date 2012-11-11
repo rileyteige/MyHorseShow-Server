@@ -123,7 +123,7 @@ function getEventBarns($barnIds) {
 		
 		$barns[] = array(ID => $barn->id,
 						BARN_NAME => $barn->name,
-						BARN_STALLS => getBarnStalls($barnIds));
+						BARN_STALLS => getBarnStalls($barn->ownStall));
 	}
 	return $barns;
 }
