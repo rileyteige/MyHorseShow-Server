@@ -59,7 +59,8 @@ function getUserEvents($eventIds) {
 						EVENT_END_DATE => $event->enddate,
 						EVENT_ADMIN => $admin->id ? loadBasicUserInfo($admin) : null,
 						EVENT_BARNS => getEventBarns($event->ownBarn),
-						EVENT_DIVISIONS => getEventDivisions($event->ownDivision));
+						EVENT_DIVISIONS => getEventDivisions($event->ownDivision),
+						EVENT_CONTACTS => getEventContacts($event->ownContact));
 	}
 	return $events;
 }

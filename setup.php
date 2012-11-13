@@ -9,6 +9,7 @@ include_once 'divisions.php';
 include_once 'classes.php';
 include_once 'helpers.php';
 include_once 'stalls.php';
+include_once 'contacts.php';
 require_once 'Slim/Slim/Slim.php';
 
 \Slim\Slim::registerAutoloader();

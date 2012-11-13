@@ -103,6 +103,18 @@ $app->post('/event', function () {
 					}
 				}
 			} break;
+			
+			/* ADD A CONTACT TO AN EVENT */
+			case CONTACT: {
+				$inContact = $typeCheck->obj;
+				if ($inContact != null) {
+					$contactId = createContact($inContact->id, $inContact->firstname, $inContact->lastname, $inContact->email, $inContact->phone, $inContact->occupationId);
+					if ($contactId > 0) {
+						$contact = R::load(CONTACT, $contactId);
+						echo json_encode($contact->export());
+					}
+				}
+			} break;
 		}
 	}
 });
@@ -183,6 +195,27 @@ $app->post('/event/barns/stalls/:stallId', function($stallId) {
 		}
 	}
 
+});
+
+$app->post('/occupation', function() {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch($typeCheck->type) {
+		
+			/* CREATE AN OCCUPATION */
+			case OCCUPATION: {
+				$inOccupation = $typeCheck->obj;
+				if ($inOccupation != null) {
+					$occId = createOccupation($inOccupation->name, $inOccupation->plural);
+					if ($occId > 0) {
+						$occupation = R::load(OCCUPATION, $occId);
+						echo json_encode($occupation->export());
+					}
+				}
+			} break;
+		}
+	}
 });
 
 $app->run();

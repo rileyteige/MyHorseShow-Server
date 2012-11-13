@@ -22,6 +22,7 @@ define('EVENT_END_DATE', 'enddate');
 define('EVENT_ADMIN', 'admin');
 define('EVENT_BARNS', 'ownBarn');
 define('EVENT_DIVISIONS', 'ownDivision');
+define('EVENT_CONTACTS', 'ownContact');
 
 define('ADMIN_ID', 'aid');
 
@@ -46,5 +47,16 @@ define('PARTICIPATION', 'participation');
 define('PARTICIPATION_RIDER', 'rider');
 define('PARTICIPATION_HORSE', 'horse');
 define('PARTICIPATION_RANK', 'rank');
+
+define('CONTACT', 'contact');
+define('CONTACT_FIRST_NAME', 'firstname');
+define('CONTACT_LAST_NAME', 'lastname');
+define('CONTACT_EMAIL', 'email');
+define('CONTACT_PHONE', 'phone');
+define('CONTACT_OCCUPATION', 'occupation');
+
+define('OCCUPATION', 'occupation');
+define('OCCUPATION_NAME', 'name');
+define('OCCUPATION_PLURAL', 'plural');
 
 ?>

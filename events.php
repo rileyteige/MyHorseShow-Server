@@ -148,4 +148,27 @@ function getEventDivisions($divisionIds) {
 	return $divisions;
 }
 
+function getEventContacts($contactIds) {
+	if ($contactIds == null) {
+		return null;
+	}
+	
+	$contacts = array();
+	foreach ($contactIds as $key => $value) {
+		$contact = R::load(CONTACT, $value->id);
+		
+		if (!$contact->id) {
+			continue;
+		}
+		
+		$contacts[] = array(ID => $contact->id,
+							CONTACT_FIRST_NAME => $contact->firstname,
+							CONTACT_LAST_NAME => $contact->lastname,
+							CONTACT_EMAIL => $contact->email,
+							CONTACT_PHONE => $contact->phone,
+							CONTACT_OCCUPATION => getOccupationInfo($contact->occupation_id));
+	}
+	return $contacts;
+}
+
 ?>
