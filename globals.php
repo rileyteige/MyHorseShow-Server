@@ -47,6 +47,7 @@ define('PARTICIPATION', 'participation');
 define('PARTICIPATION_RIDER', 'rider');
 define('PARTICIPATION_HORSE', 'horse');
 define('PARTICIPATION_RANK', 'rank');
+define('RANKINGS', 'rankings');
 
 define('CONTACT', 'contact');
 define('CONTACT_FIRST_NAME', 'firstname');

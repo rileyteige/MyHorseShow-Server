@@ -171,6 +171,18 @@ $app->post('/events/:eventId/classes/:classId', function($eventId, $classId) {
 					}
 				}
 			} break;
+			
+			/* POST RANKINGS TO A CLASS */
+			case RANKINGS: {
+				$inRankings = $typeCheck->obj;
+				if ($inRankings != null) {
+					$classId = postRankings($classId, $inRankings);
+					if ($classId > 0) {
+						$class = R::load(SHOWCLASS, $classId);
+						echo json_encode($class->export());
+					}
+				}
+			}
 		}
 	}
 });

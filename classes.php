@@ -84,4 +84,41 @@ function getClassParticipants($participationIds) {
 	}
 	return $participations;
 }
+
+function postRankings($classId, $rankings) {
+	$class = R::load(SHOWCLASS, $classId);
+	if (!$class->id) {
+		return null;
+	}
+	
+	$participations = R::exportAll($class->ownParticipation);
+	if ($participations == null) {
+		return null;
+	}
+	
+	foreach($rankings as $key => $value) {
+		$riderId = $value->id;
+		$rank = $value->rank;
+		
+		if ($riderId == null || $rank == null) {
+			return null;
+		}
+		
+		$rider = R::load(USER, $riderId);
+		if (!$rider->id) {
+			continue;
+		}
+		
+		foreach($participations as $participationGetter) {
+			$participation = R::load(PARTICIPATION, $participationGetter[ID]);
+			if ($participation->rider_id == $riderId) {
+				$participation->rank = $rank;
+				R::store($participation);
+				break;
+			}
+		}
+	}
+	
+	return R::store($class);
+}
 ?>
