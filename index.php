@@ -173,6 +173,8 @@ $app->post('/events/:eventId/classes/:classId', function($eventId, $classId) {
 			} break;
 			
 			/* POST RANKINGS TO A CLASS */
+			/* EX: */
+			/* { "type":"rankings", "obj":[ { "id":"1", "rank":"1" }, etc. ] }*/
 			case RANKINGS: {
 				$inRankings = $typeCheck->obj;
 				if ($inRankings != null) {
