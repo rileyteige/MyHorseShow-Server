@@ -60,7 +60,7 @@ $app->post('/event', function () {
 			case EVENT: {
 				$inEvent = $typeCheck->obj;
 				if ($inEvent != null) {
-					$eventId = createEvent($inEvent->admin, $inEvent->name, $inEvent->startdate, $inEvent->enddate);
+					$eventId = createEvent($inEvent->adminId, $inEvent->name, $inEvent->startdate, $inEvent->enddate);
 					if ($eventId > 0) {
 						$event = R::load(EVENT, $eventId);
 						echo json_encode($event->export());
