@@ -34,17 +34,6 @@ $app->post('/user', function () {
 					}
 				}
 			} break;
-			
-			/* LINK A USER TO AN EVENT */
-			case EVENT: {
-				$inEvent = $typeCheck->obj;
-				if ($inEvent != null) {
-					$returnCode = giveUserEvent($inEvent->email, $inEvent->eventId);
-					if ($returnCode < 0) {
-						throw new Exception('Could not give event to user.');
-					}
-				}
-			} break;
 		}
 	}
 });
@@ -112,6 +101,27 @@ $app->post('/event', function () {
 					if ($contactId > 0) {
 						$contact = R::load(CONTACT, $contactId);
 						echo json_encode($contact->export());
+					}
+				}
+			} break;
+		}
+	}
+});
+
+/* SPECIFIC EVENT */
+$app->post('/event/:eventId', function($eventId) {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch ($typeCheck->type) {
+			
+			/* ADD A USER TO AN EVENT */
+			case USER: {
+				$inUser = $typeCheck->obj;
+				if ($inUser != null) {
+					$returnCode = giveUserEvent($inUser->email, $eventId);
+					if ($returnCode < 0) {
+						throw new Exception('Could not give event to user.');
 					}
 				}
 			} break;
