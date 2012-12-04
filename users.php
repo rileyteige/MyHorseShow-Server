@@ -40,29 +40,50 @@ function giveUserEvent($email, $eventId) {
 	return 0;
 }
 
-function getUserEvents($eventIds) {
+function getUserEvents($userId, $eventIds) {
 	if ($eventIds == null)
 		return null;
 		
 	$events = array();
 	foreach ($eventIds as $key => $value) {
-		$event = R::load(EVENT, $value->id);
-		if (!$event->id) {
-			continue;
-		}
-		
-		$admin = R::load(USER, $event->admin_id);
-		
-		$events[] = array(ID => $event->id,
-						EVENT_NAME => $event->name,
-						EVENT_START_DATE => $event->startdate,
-						EVENT_END_DATE => $event->enddate,
-						EVENT_ADMIN => $admin->id ? loadBasicUserInfo($admin) : null,
-						EVENT_BARNS => getEventBarns($event->ownBarn),
-						EVENT_DIVISIONS => getEventDivisions($event->ownDivision),
-						EVENT_CONTACTS => getEventContacts($event->ownContact));
+		$events[] = getEventInfo($userId, $value->id);
 	}
 	return $events;
+}
+
+function getUserEventInfo($email, $eventId) {
+	$user = getUserByEmail($email);
+	if ($user == null || !$eventId)
+		return invalidLogin();
+	
+	$event = getEventClassInfo($eventId);
+	if (!$event)
+		return invalidLogin();
+	
+	$classes = array();
+	if ($event[EVENT_DIVISIONS] != null) {
+
+		foreach ($event[EVENT_DIVISIONS] as $division) {
+			if ($division[DIVISION_CLASSES] == null)
+				continue;
+			
+			foreach ($division[DIVISION_CLASSES] as $class) {
+				if ($class[CLASS_PARTICIPANTS] == null)
+					continue;
+				
+				foreach($class[CLASS_PARTICIPANTS] as $participation) {
+					$riderId = $participation[PARTICIPATION_RIDER][ID];
+
+					if ($riderId == $user->id) {
+						$classes[] = $class;
+						break;
+					}
+				}
+			}
+		}
+	}
+	
+	return array( DIVISION_CLASSES => $classes);
 }
 
 function getLoginInfo($email, $password) {
@@ -85,7 +106,7 @@ function getLoginInfo($email, $password) {
 				USER_LNAME => $user->lastname,
 				USER_EMAIL => $user->email,
 				USER_USEF_ID => $user->usefid,
-				USER_EVENTS => getUserEvents($eventIds)); //count($events) > 0 ? $events : null);
+				USER_EVENTS => getUserEvents($user->id, $eventIds)); //count($events) > 0 ? $events : null);
 }
 
 function getUser($email) {
@@ -98,11 +119,25 @@ function loadBasicUserInfo($user) {
 }
 
 /* Returns basic info given an array of user IDs */
-function getBasicUserInfo($userIds) {
-	if ($userIds == null) {
-		echo 'user ids is null.';
+function getBasicUserInfo($userIds, $eventId) {
+	if ($userIds == null)
 		return null;
+	
+	$users = array();
+	foreach ($userIds as $key => $value) {
+		$user = R::load(USER, $value->id);
+		if (!$user->id) {
+			continue;
+		}
+
+		$users[] = loadBasicUserInfo($user);
 	}
+	return $users;
+}
+
+function getBasicUserInfoWithClasses($userIds, $eventId) {
+	if ($userIds == null)
+		return null;
 	
 	$users = array();
 	foreach ($userIds as $key => $value) {
@@ -111,7 +146,11 @@ function getBasicUserInfo($userIds) {
 			continue;
 		}
 		
-		$users[] = loadBasicUserInfo($user);
+		$userInfo = loadBasicUserInfo($user);
+		$userEventInfo = getUserEventInfo($user->email, $eventId);
+		if ($userEventInfo)
+			$userInfo[DIVISION_CLASSES] = $userEventInfo[DIVISION_CLASSES];
+		$users[] = $userInfo;
 	}
 	return $users;
 }

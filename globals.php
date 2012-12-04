@@ -23,6 +23,7 @@ define('EVENT_ADMIN', 'admin');
 define('EVENT_BARNS', 'ownBarn');
 define('EVENT_DIVISIONS', 'ownDivision');
 define('EVENT_CONTACTS', 'ownContact');
+define('EVENT_PARTICIPANTS', 'sharedUser');
 
 define('ADMIN_ID', 'aid');
 

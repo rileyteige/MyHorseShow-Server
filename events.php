@@ -109,6 +109,41 @@ function getAllEvents() {
 	return $events;
 }
 
+function rem_array($array, $str){
+	foreach ($array as $key => $value) {
+		if ($array[$key][ID] == "$str")
+			unset($array[$key]);
+	}
+	return $array;
+}
+
+function getEventClassInfo($eventId) {
+	$event = R::load(EVENT, $eventId);
+	if (!$event->id)
+		return null;
+	
+	return array(EVENT_DIVISIONS => getEventDivisions($event->ownDivision));
+}
+
+function getEventInfo($userId, $eventId) {
+	$event = R::load(EVENT, $eventId);
+	if (!$event->id) {
+		continue;
+	}
+	
+	$admin = R::load(USER, $event->admin_id);
+	
+	return array(ID => $event->id,
+		EVENT_NAME => $event->name,
+		EVENT_START_DATE => $event->startdate,
+		EVENT_END_DATE => $event->enddate,
+		EVENT_ADMIN => $admin->id ? loadBasicUserInfo($admin) : null,
+		EVENT_BARNS => getEventBarns($event->ownBarn),
+		EVENT_DIVISIONS => getEventDivisions($event->ownDivision),
+		EVENT_CONTACTS => getEventContacts($event->ownContact),
+		EVENT_PARTICIPANTS => $userId == $event->admin_id ? getBasicUserInfoWithClasses(rem_array($event->sharedUser, $event->admin_id), $eventId) : null);
+}
+
 function getEventBarns($barnIds) {
 	if ($barnIds == null)
 		return null;

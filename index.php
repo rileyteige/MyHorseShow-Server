@@ -11,6 +11,14 @@ $app->get('/user/:email/:password', function ($email, $password) {
 	}
 });
 
+/* GET USER INFO FOR ONE EVENT */
+$app->get('/user/:email/events/:eventId', function ($email, $eventId) {
+	$user = getUserEventInfo($email, $eventId);
+	if ($user != null) {
+		echo json_encode($user);
+	}
+});
+
 /* GET ALL EVENTS */
 $app->get('/events/all', function() {
 	echo json_encode(getAllEvents());
