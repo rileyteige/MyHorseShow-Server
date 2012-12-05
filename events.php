@@ -128,7 +128,7 @@ function getEventClassInfo($eventId) {
 function getEventInfo($userId, $eventId) {
 	$event = R::load(EVENT, $eventId);
 	if (!$event->id) {
-		continue;
+		return null;
 	}
 	
 	$admin = R::load(USER, $event->admin_id);

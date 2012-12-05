@@ -77,30 +77,6 @@ $app->post('/event', function () {
 				}
 			} break;
 			
-			/* ADD A DIVISION TO AN EVENT */
-			case DIVISION: {
-				$inDivision = $typeCheck->obj;
-				if ($inDivision != null) {
-					$divisionId = createDivision($inDivision->id, $inDivision->name);
-					if ($divisionId > 0) {
-						$division = R::load(DIVISION, $divisionId);
-						echo json_encode($division->export());
-					}
-				}
-			} break;
-			
-			/* ADD A CLASS TO AN EVENT */
-			case SHOWCLASS: {
-				$inClass = $typeCheck->obj;
-				if ($inClass != null) {
-					$classId = createClass($inClass->id, $inClass->name);
-					if ($classId > 0) {
-						$class = R::load(SHOWCLASS, $classId);
-						echo json_encode($class->export());
-					}
-				}
-			} break;
-			
 			/* ADD A CONTACT TO AN EVENT */
 			case CONTACT: {
 				$inContact = $typeCheck->obj;
@@ -122,14 +98,28 @@ $app->post('/event/:eventId', function($eventId) {
 	if ($body != null) {
 		$typeCheck = json_decode($body);
 		switch ($typeCheck->type) {
-			
+
+			/* ADD A DIVISION TO AN EVENT */
+			case DIVISION: {
+				$inDivision = $typeCheck->obj;
+				if ($inDivision != null) {
+					$divisionId = createDivision($eventId, $inDivision->name);
+					if ($divisionId > 0) {
+						$division = R::load(DIVISION, $divisionId);
+						echo json_encode($division->export());
+					}
+				}
+			} break;
+		
 			/* ADD A USER TO AN EVENT */
 			case USER: {
 				$inUser = $typeCheck->obj;
 				if ($inUser != null) {
 					$returnCode = giveUserEvent($inUser->email, $eventId);
-					if ($returnCode < 0) {
+					if ($returnCode < 0 || $returnCode == null) {
 						throw new Exception('Could not give event to user.');
+					} else {
+						echo json_encode($returnCode);
 					}
 				}
 			} break;
@@ -155,6 +145,29 @@ $app->post('/event/barns/:barnId', function($barnId) {
 					}
 				}
 			} break;
+		}
+	}
+});
+
+/* DIVISIONS */
+$app->post('/divisions/:divisionId', function($divisionId) {
+	$body = http_get_request_body();
+	if ($body != null) {
+		$typeCheck = json_decode($body);
+		switch($typeCheck->type) {
+		
+			/* ADD A CLASS TO AN EVENT */
+			case SHOWCLASS: {
+				$inClass = $typeCheck->obj;
+				if ($inClass != null) {
+					$classId = createClass($divisionId, $inClass->name);
+					if ($classId > 0) {
+						$class = R::load(SHOWCLASS, $classId);
+						echo json_encode($class->export());
+					}
+				}
+			} break;
+			
 		}
 	}
 });

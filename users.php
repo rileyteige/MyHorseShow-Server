@@ -37,7 +37,7 @@ function giveUserEvent($email, $eventId) {
 
 	$id = R::store($user);
 	
-	return 0;
+	return getUserEventInfo($email, $eventId);
 }
 
 function getUserEvents($userId, $eventIds) {
@@ -83,7 +83,12 @@ function getUserEventInfo($email, $eventId) {
 		}
 	}
 	
-	return array( DIVISION_CLASSES => $classes);
+	return array( ID => $user->id,
+				USER_FNAME => $user->firstname,
+				USER_LNAME => $user->lastname,
+				USER_EMAIL => $user->email,
+				USER_USEF_ID => $user->usefid,
+				DIVISION_CLASSES => $classes);
 }
 
 function getLoginInfo($email, $password) {
